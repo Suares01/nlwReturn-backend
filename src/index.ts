@@ -1,7 +1,6 @@
-import { Server } from './Server';
+import API from './Server';
 
 (() => {
-  const server = new Server();
-
-  server.start();
+  API.prepareServer();
+  API.start();
 })();
