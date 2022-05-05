@@ -1,5 +1,12 @@
+import 'reflect-metadata';
+import '@shared/containers';
+
 import config from 'config';
 import express from 'express';
+
+import * as database from '@database/prisma';
+
+import router from './routes';
 
 class Server {
   constructor(private port = config.get<number>('App.port')) {}
@@ -12,13 +19,23 @@ class Server {
     );
   }
 
-  public prepareServer(): void {
+  public async close(): Promise<void> {
+    await database.disconnect();
+  }
+
+  public async prepareServer(): Promise<void> {
     this.setUpExpress();
+    await database.connect();
+    this.setUpRoutes();
   }
 
   private setUpExpress(): void {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+  }
+
+  private setUpRoutes(): void {
+    this.app.use(router);
   }
 }
 
