@@ -4,6 +4,7 @@ import '@shared/containers';
 import config from 'config';
 import cors from 'cors';
 import express from 'express';
+import { createServer } from 'http';
 
 import * as database from '@database/prisma';
 
@@ -14,14 +15,22 @@ class Server {
 
   public app = express();
 
+  public server = createServer(this.app);
+
   public start(): void {
-    this.app.listen(this.port, () =>
+    this.server.listen(this.port, () =>
       console.log(`Server ir running on port ${this.port}`),
     );
   }
 
   public async close(): Promise<void> {
     await database.disconnect();
+
+    await new Promise((resolve, reject) => {
+      this.server.close((error) => {
+        return error ? reject(error) : resolve(true);
+      });
+    });
   }
 
   public async prepareServer(): Promise<void> {
