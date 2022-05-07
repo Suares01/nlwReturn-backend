@@ -9,6 +9,9 @@
     "build": "babel src --extensions \".ts\" --out-dir dist --copy-files --no-copy-ignored",
     "start": "node -r dotenv/config dist/index.js"
   },
+  "engines": {
+    "node": "16.14.2"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
