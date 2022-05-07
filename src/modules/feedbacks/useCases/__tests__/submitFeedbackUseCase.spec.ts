@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 
+import { UnprocessableEntityError } from '@shared/errors/internalErrors';
+
 import { SubmitFeedbackUseCase } from '../SubmitFeedbackUseCase';
 
 describe('Submit feedback', () => {
@@ -30,7 +32,15 @@ describe('Submit feedback', () => {
         comment: 'Bugou tudo',
         screenshot: 'data:image/png;base64,bugoutudo.png',
       }),
-    ).rejects.toThrow();
+    ).rejects.toBeInstanceOf(UnprocessableEntityError);
+
+    await expect(
+      submitFeedbackUseCase.execute({
+        type: '',
+        comment: 'Bugou tudo',
+        screenshot: 'data:image/png;base64,bugoutudo.png',
+      }),
+    ).rejects.toThrow(new UnprocessableEntityError('Type is required.'));
   });
 
   it('should not be able to submit feedback without comment', async () => {
@@ -40,7 +50,15 @@ describe('Submit feedback', () => {
         comment: '',
         screenshot: 'data:image/png;base64,bugoutudo.png',
       }),
-    ).rejects.toThrow();
+    ).rejects.toBeInstanceOf(UnprocessableEntityError);
+
+    await expect(
+      submitFeedbackUseCase.execute({
+        type: 'BUG',
+        comment: '',
+        screenshot: 'data:image/png;base64,bugoutudo.png',
+      }),
+    ).rejects.toThrow(new UnprocessableEntityError('Comment is required.'));
   });
 
   it('should not be able to submit feedback with invalid screenshot', async () => {
@@ -50,6 +68,16 @@ describe('Submit feedback', () => {
         comment: 'Bugou tudo',
         screenshot: 'bugoutudo.png',
       }),
-    ).rejects.toThrow();
+    ).rejects.toBeInstanceOf(UnprocessableEntityError);
+
+    await expect(
+      submitFeedbackUseCase.execute({
+        type: 'BUG',
+        comment: 'Bugou tudo',
+        screenshot: 'bugoutudo.png',
+      }),
+    ).rejects.toThrow(
+      new UnprocessableEntityError('Invalid screenshot format.'),
+    );
   });
 });

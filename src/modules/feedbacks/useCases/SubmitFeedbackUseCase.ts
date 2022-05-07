@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 
 import { IFeedbacksRepository } from '@modules/feedbacks/repositories/IFeedbacksRepository';
 import { IMailService } from '@services/MailService';
+import { UnprocessableEntityError } from '@shared/errors/internalErrors';
 
 interface ISubmitFeedbackRequest {
   type: string;
@@ -23,10 +24,12 @@ export class SubmitFeedbackUseCase {
     type,
     screenshot,
   }: ISubmitFeedbackRequest): Promise<void> {
-    if (!type || !comment) throw new Error('Type is required.');
+    if (!type) throw new UnprocessableEntityError('Type is required.');
+
+    if (!comment) throw new UnprocessableEntityError('Comment is required.');
 
     if (screenshot && !screenshot.startsWith('data:image/png;base64'))
-      throw new Error('Invalid screenshot format');
+      throw new UnprocessableEntityError('Invalid screenshot format.');
 
     await this.feedbacksRepository.create({ comment, type, screenshot });
 
