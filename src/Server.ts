@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import '@shared/containers';
+import 'express-async-errors';
 
 import config from 'config';
 import cors from 'cors';
@@ -8,6 +9,7 @@ import { createServer } from 'http';
 
 import * as database from '@database/prisma';
 
+import { InternalErrorHandler } from './middlewares/InternalErrorHandler';
 import router from './routes';
 
 class Server {
@@ -37,6 +39,7 @@ class Server {
     this.setUpExpress();
     await database.connect();
     this.setUpRoutes();
+    this.setUpErrorMiddlewares();
   }
 
   private setUpExpress(): void {
@@ -51,6 +54,10 @@ class Server {
 
   private setUpRoutes(): void {
     this.app.use(router);
+  }
+
+  private setUpErrorMiddlewares(): void {
+    this.app.use(InternalErrorHandler);
   }
 }
 
