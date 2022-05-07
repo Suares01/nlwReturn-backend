@@ -5,12 +5,19 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register -r dotenv/config --inspect --respawn --transpile-only --ignore-watch node_modules --no-notify src/index.ts",
-    "test": "jest --coverage --projects ."
+    "test": "jest --coverage --projects .",
+    "build": "babel src --extensions \".ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "start": "node -r dotenv/config dist/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.17.10",
+    "@babel/plugin-proposal-decorators": "^7.17.9",
+    "@babel/preset-env": "^7.17.10",
+    "@babel/preset-typescript": "^7.16.7",
     "@eslint/create-config": "^0.1.2",
     "@types/config": "^0.0.41",
     "@types/cors": "^2.8.12",
@@ -20,6 +27,7 @@
     "@types/nodemailer": "^6.4.4",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
+    "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^8.14.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^2.7.1",
