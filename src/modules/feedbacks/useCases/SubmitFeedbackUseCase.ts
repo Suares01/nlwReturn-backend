@@ -23,6 +23,11 @@ export class SubmitFeedbackUseCase {
     type,
     screenshot,
   }: ISubmitFeedbackRequest): Promise<void> {
+    if (!type || !comment) throw new Error('Type is required.');
+
+    if (screenshot && !screenshot.startsWith('data:image/png;base64'))
+      throw new Error('Invalid screenshot format');
+
     await this.feedbacksRepository.create({ comment, type, screenshot });
 
     await this.mailService.sendMail({
