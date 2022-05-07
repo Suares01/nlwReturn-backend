@@ -1,5 +1,6 @@
 import config from 'config';
 import nodemailer from 'nodemailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 import { IMailService, IMailServiceData } from '@services/MailService';
 
@@ -19,8 +20,11 @@ export class NodemailerMailService implements IMailService {
     },
   });
 
-  public async sendMail({ body, subject }: IMailServiceData): Promise<void> {
-    await this.transport.sendMail({
+  public async sendMail({
+    body,
+    subject,
+  }: IMailServiceData): Promise<SMTPTransport.SentMessageInfo> {
+    return await this.transport.sendMail({
       from: 'Equipe NLW <oi@nwl.com>',
       to: 'Equipe de Suporte <lucas.trabalho7.ls@gmail.com>',
       subject,

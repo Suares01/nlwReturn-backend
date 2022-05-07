@@ -4,5 +4,5 @@ export interface IMailServiceData {
 }
 
 export interface IMailService {
-  sendMail(data: IMailServiceData): Promise<void>;
+  sendMail(data: IMailServiceData): Promise<any>;
 }
