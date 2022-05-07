@@ -8,6 +8,5 @@ export interface IMailServiceConfig {
 }
 
 export interface IAppConfig {
-  port: number;
   mailService: IMailServiceConfig;
 }

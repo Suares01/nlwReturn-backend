@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import '@shared/containers';
 import 'express-async-errors';
 
-import config from 'config';
 import cors from 'cors';
 import express from 'express';
 import { createServer } from 'http';
@@ -13,7 +12,7 @@ import { InternalErrorHandler } from './middlewares/InternalErrorHandler';
 import router from './routes';
 
 class Server {
-  constructor(private port = config.get<number>('App.port')) {}
+  constructor(private port = process.env.PORT || 3333) {}
 
   public app = express();
 
