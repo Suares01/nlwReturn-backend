@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import '@shared/containers';
 
 import config from 'config';
+import cors from 'cors';
 import express from 'express';
 
 import * as database from '@database/prisma';
@@ -30,6 +31,11 @@ class Server {
   }
 
   private setUpExpress(): void {
+    this.app.use(
+      cors({
+        origin: '',
+      }),
+    );
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
   }
